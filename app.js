@@ -6,7 +6,7 @@ const routerhome = require("./route/home.route");
 const morgan = require("morgan");
 const notfound = require("./route/404");
 const viewEngine = require("./config/engine.config");
-// const video = require("./route/nine-dash-video.route");
+const video = require("./route/nine-dash-video.route");
 const cors = require("cors");
 const compression = require("compression");
 
@@ -22,25 +22,8 @@ app.use(viewEngine);
 app.use(morgan("dev"));
 app.use(parseReq);
 app.use(routerhome);
-// app.use(video);
+app.use(video);
 // app.use(routeNineDash);
 app.use(notfound);
 
 module.exports = app;
-
-
-// const http = require('http');
-// require('dotenv').config();
-
-// const hostname = process.env.HOSTNAME;
-// const port = process.env.PORT;
-
-// const server = http.createServer((req, res) => {
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'text/plain');
-//   res.end('Hello World');
-// });
-
-// server.listen(port, hostname, () => {
-//   console.log(`Server running at http://${hostname}:${port}/`);
-// });

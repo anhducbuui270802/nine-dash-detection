@@ -1,5 +1,206 @@
 <style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --orange: #F2C14E;
+        --winning-blocks: #2d414b;
+    }
+
+    body {
+        color: var(--orange);
+        font-family: '"Georgia";
+    }
+
+    .container {
+        background-image: url("http://pixner.net/boleto/demo/assets/images/account/account-bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .container h1 {
+        margin-top: 0; 
+        text-align: center;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    .title {
+        font-size: 54px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        color: var(--orange);
+    }
+
+    .upload_img {
+        margin-bottom: 20px;
+    }
+
+    .label_name {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: var(--orange);
+    }
+
+        .btn_upload {
+        color: var(--orange);
+    }
+
+    input[type=file]::file-selector-button {
+        position: relative;
+        display: inline-block;
+        margin-left: 10px;
+        padding: 3px 10px;
+        background-image: linear-gradient(169deg, #5560ff 17%, #aa52a1 63%, #ff4343 100%);
+        color: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+    }
+
+    .btn_submit,
+    .btn_cancel {
+        padding: 10px 20px;
+        background-image: linear-gradient(169deg, #5560ff 17%, #aa52a1 63%, #ff4343 100%);
+        color: #fff;
+        border: none;
+        outline: none;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 10px;
+        margin-right: 10px;
+        height: 40px;
+        width: 150px;
+        border-radius: 30px;
+        transition: all ease 0.3s;
+    }
+
+    .btn_cancel {
+        background-image: none;
+        background-color: var(--orange);
+    }
+
+    .btn_cancel:hover {
+        background-color: #d48326;
+    }
+
+    #upload_video {
+        background-image: linear-gradient(169deg, #ff4343 17%, #aa52a1 63%, #5560ff 100%);
+    }
+
+    #upload_video:hover , .btn_submit:hover{
+        cursor: pointer;
+        transform: translateY(-3px);
+    }
+
+    .form-control-borderless {
+    border: none;
+    }
+
+    .form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+        border: none;
+        outline: none;
+        box-shadow: none;
+    }
+
+    
 </style>
 <main class="container">
     <h1 class="title">MY DETECTOR</h1>
+    <form action="/detect" method="post" enctype="multipart/form-data">
+        <div class="upload_img">
+            <label class="label_name">Select picture: </label>
+            <input class="btn_upload" type="file" name="image_uploaded" id="image_uploaded" accept="image/*" multiple>
+            <br>
+            <span class="error" id="file_error"></span>
+        </div>
+        <div class="btn">
+            <input class="btn_submit btn_hover" type="submit" value="Upload Image" name="btn"
+                onclick="return validateForm(event)">
+            <input type="submit" value="Upload Video" class="btn_submit btn_hover" id="upload_video">
+            <input class="btn_cancel btn_hover" type="reset" value="Cancel">
+        </div>
+    </form>
 </main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    socket.on('progress', (progress) => {
+        console.log(progress)
+    })
+    socket.on('connect', () => {
+            console.log('Connected to server');
+    })
+    function validateForm(event) {
+            let fileInput = document.getElementById('image_uploaded');
+            let file = fileInput.files[0];
+            let files = fileInput.files;
+            let fileError = document.getElementById('file_error');
+
+            if (!file) {
+                fileError.textContent = "Please select an image to upload.";
+                fileError.style.display = "inline-block";
+                fileError.style.marginTop = "0.5rem";
+                fileError.style.color = "red";
+                event.preventDefault();
+                return false;
+            }
+
+            if (files.length > 10) {
+                event.preventDefault();
+                fileError.textContent = "You can only upload a maximum of 10 images.";
+                fileError.style.display = "inline-block";
+                fileError.style.marginTop = "0.5rem";
+                fileError.style.color = "red";
+                return false;
+            }
+
+            let fileType = file.type;
+            if (!fileType.startsWith('image/')) {
+                fileError.textContent = "Invalid file type. Please upload an image.";
+                fileError.style.display = "inline-block";
+                fileError.style.marginTop = "0.5rem";
+                fileError.style.color = "red";
+                event.preventDefault();
+                return false;
+            }
+            fileError.textContent = "";
+            fileError.style.display = "none";
+            return true;
+        }
+        const uploadVideo = document.getElementById('upload_video');
+        uploadVideo.addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = '/video';
+        })
+
+        function validateFormURL(event) {
+            let urlError = document.getElementById('url_error');
+            var url = $('#url_input').val();
+            if (url === '') {
+                urlError.textContent = "Please paste the url to scan.";
+                urlError.style.display = "inline-block";
+                urlError.style.marginTop = "0.5rem";
+                urlError.style.color = "red";
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+</script>
