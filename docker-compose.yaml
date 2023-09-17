@@ -1,0 +1,39 @@
+version: "1"
+services:
+  my-container:
+      depends_on:
+        - rabbitmq
+      networks:
+        - rabbit-network
+      image: ducbui/yolov5-nodejs:v1.1.0
+      ports:
+        - 8080:3500
+      volumes:
+        - /home/ducbui/Documents/UIT/nine-dash:/usr/src/app
+      command: sh -c "sleep 10 && npm start"
+      restart: unless-stopped
+      healthcheck:
+        test: wget --quiet --tries=1 --spider http://localhost:3500 || exit 1z
+        interval: 30s
+        timeout: 10s
+        retries: 5
+  rabbitmq:
+    image: dubc/rabbitmq-alpine-all-plugins
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - rabbit-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  
+networks:
+  rabbit-network:
+    driver: bridge
+
+  
+   
+    

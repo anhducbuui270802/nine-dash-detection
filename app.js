@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const parseReq = require("./config/request.config");
 const routerhome = require("./route/home.route");
-// const routeNineDash = require("./route/nine-dash.route");
+const routeNineDash = require("./route/nine-dash.route");
 const morgan = require("morgan");
 const notfound = require("./route/404");
 const viewEngine = require("./config/engine.config");
@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 app.use(parseReq);
 app.use(routerhome);
 app.use(video);
-// app.use(routeNineDash);
+app.use(routeNineDash);
 app.use(notfound);
 
 module.exports = app;
