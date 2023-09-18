@@ -7,7 +7,7 @@ const io = socketIO(server);
 const { loadModel } = require("./service/load-model.service");
 const tf = require("@tensorflow/tfjs-node");
 
-const { PORT } = process.env.PUBLISH_PORT;
+const { PORT } = process.env;
 global._io = io;
 
 const onConnection = (socket) => {

@@ -1,25 +1,25 @@
 # Docker compose commands
 
 defaults:
-	up
+	docker compose up
 
 up:
-	docker-compose up --remove-orphans
+	docker compose up --remove-orphans
 
 detach:
-	docker-compose up -d --remove-orphans
+	docker compose up -d --remove-orphans
 
 down:
-	docker-compose down
+	docker compose down
 
 stop:
-	docker-compose stop
+	docker compose stop
 
 container:
-	docker-compose up my-container
+	docker compose up my-container
 
 rabbit:
-	docker-compose up rabbitmq
+	docker compose up rabbitmq
 
 # Docker build command
 image:

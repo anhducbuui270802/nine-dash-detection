@@ -1,4 +1,3 @@
-# build stage
 FROM node:18
 
 RUN apt-get update && apt-get install -y ffmpeg
@@ -14,3 +13,4 @@ COPY . .
 EXPOSE 8080
 
 CMD ["npm", "start"]
+
